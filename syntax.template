@@ -1,0 +1,21 @@
+[var_int]
+a = 5;
+b = 2;
+c = a + b;
+
+[var_float]
+a = 5.0
+b = 2.0
+c = 1.24
+d = a + b + d;
+
+[var_operations]
+a = 5;
+b = 2;
+
+c = a - b;
+d = a + b;
+e = a / b;
+f = a * b;
+g1 = a**2;
+g2 = b**2;

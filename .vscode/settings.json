@@ -31,6 +31,9 @@
   "C_Cpp_Runner.useAddressSanitizer": false,
   "files.associations": {
     "preprocessor.c": "cpp",
-    "stdlib.h": "c"
+    "stdlib.h": "c",
+    "stdio.h": "c",
+    "libc-header-start.h": "c",
+    "common.h": "c"
   }
 }

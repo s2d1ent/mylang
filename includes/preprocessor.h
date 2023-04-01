@@ -10,8 +10,13 @@ typedef enum prpcs_types{
 } prpcs_types_t;
 
 char *prpcs_operators[] = {
-    "import",
-    "define"
+    "@import",
+    "@define",
+    "@global"
 };
+void prpcs_import();
+void prpcs_define();
+void prpcs_global();
+
 
 #endif /* PREPROCESSOR_H */

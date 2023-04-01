@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "./includes/types.h"
+#include "./includes/common.h"
 #include "./includes/interpreter.h"
 #include "./includes/preprocessor.h"
-#include "./includes/types.h"
 
 FILE *file = NULL;
+char *file_string = NULL;
 FILE *prpcs_file = NULL;
 
 int main(int argc, char *argv[]){
@@ -18,9 +20,6 @@ int main(int argc, char *argv[]){
             return 0;
         }
         start(file);
-
-        
-
         // close source file
         fclose(file);
     }

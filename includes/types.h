@@ -20,7 +20,6 @@ typedef struct element{
     char *name;
     void *value;
     types_t type;
-    types_t type1;
 } element_t;
 
 typedef struct tokens_tree{
@@ -31,4 +30,6 @@ typedef struct tokens_tree_root{
 
 } token_tree_root_t;
 
-#endif /* TYPES_H */
+element_t root;
+
+#endif /* !TYPES_H */
