@@ -1,0 +1,28 @@
+/*
+    Создать переменную(имя, размер, значенич): CRV name size value
+    Сложить значения: ADD var1 var2; ADD var1 value;
+    Вычитание значения: SUB var1 var2; ADD var1 value;
+    Умножение значения: MUL var1 var2; ADD var1 value;
+    Деление значения: DIV var1 var2; ADD var1 value;
+    
+    Сравнение: CMP var1 var2; CMPE var1 var2
+                CMPEE var1 var2; CMPNE var1 var2
+                CMP* - var1 var2 result
+    CMPB - больше ли первое значение второго 
+    CMPS - меньше ли первое значение второго
+    CMPBE - больши или равно первое значение второму
+    CMPSE - меньше или равно первое значение второму
+    CMPE - равны ли оба этих значения
+    CMP* - вместо * выбор сравнения; сравнение с записью результата
+
+    Условные конструкции:
+        IF value1 $ value2:
+            ...
+        ELSE
+            ...
+        ENDIF 
+
+    Циклы:
+    ы    
+*/
+CRV a 4 2
