@@ -9,9 +9,9 @@ typedef enum e_lang_types {
     LANG_LONG,
     LANG_FLOAT,
     LANG_DOUBLE,
-    LANG_CONST, // SET CONST FLAG
-    LANG_UNSIGNED, // SET UNSIHNED FLAG
-    LANG_NULL, // DOES VALUE VARIABLE IS NULL
+    LANG_CONST, 
+    LANG_UNSIGNED,
+    LANG_NULL,
     LANG_FUNC,
     LANG_STRUCT
 } lang_types;

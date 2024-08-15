@@ -5,7 +5,6 @@
 #define MAX_LEN_STRBLD 116508
 #include <stdio.h>
 #include <stdlib.h>
-#include "common.h"
 
 typedef struct string_builder_symbol_s{
     char value;
@@ -18,16 +17,35 @@ typedef struct string_builder_s{
 } string_builder;
 
 string_builder *init_strbld();
+
 long size_strbld(string_builder*);
+long size_max_strbld();
 int is_empty_strbld(string_builder*);
 char* get_strbld(string_builder*);
+string_builder_symbol *get_last_strbld(string_builder*);
+
 int set_symbol(string_builder*,char);
 int set_string(string_builder*,char*);
-string_builder_symbol *get_last_strbld(string_builder*);
+
 void clear_strbld(string_builder*);
 void free_strbld(string_builder*);
 
+long strlen(char*);
 
+long strlen(char *string){
+    long result = 0;
+    if(string == NULL){
+        return 0;
+    }
+    while(1){
+        if(string[result] == '\0'){
+            break;
+        }
+        ++result;
+    }
+
+    return result;
+}
 
 string_builder *init_strbld(){
     return ((string_builder*)malloc(sizeof(string_builder)));
@@ -35,6 +53,10 @@ string_builder *init_strbld(){
 
 long size_strbld(string_builder *string_builder){
     return string_builder->size;
+}
+
+long size_max_strbld(){
+    return MAX_LEN_STRBLD;
 }
 
 int is_empty_strbld(string_builder *string_builder){
@@ -80,6 +102,9 @@ string_builder_symbol *get_last_strbld(string_builder *string_builder){
 
 int set_symbol(string_builder *string_builder,char in_symbol){
     string_builder_symbol *tmp_symbol = NULL;
+    if(string_builder->size == MAX_LEN_STRBLD){
+       return 0; 
+    }
     if(string_builder == NULL){
         return 0;
     }
@@ -107,7 +132,7 @@ int set_string(string_builder *string_builder,char *in_string){
     if(!is_empty_strbld(string_builder)){
         clear_strbld(string_builder);
     }
-    for(int i = 0 ; i < size; ++i){
+    for(int i = 0 ; i < size && i <= MAX_LEN_STRBLD; ++i){
         set_symbol(string_builder, in_string[i]);
     }
     return 1;

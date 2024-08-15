@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "common.c"
-#include "byte_code.c"
+#include "translator.c"
+#include "lang_words.c"
 #include "./headers/string_builder.h"
 
 int main(int argc, char **argv){
@@ -10,7 +12,7 @@ int main(int argc, char **argv){
     printf("ONLY INTERPRETER MODE\n");
     FILE *fp = fopen("./source/main.lng", "r");
 
-    byte_init(fp);
+    //lang_init(fp);
     
     fclose(fp);
     return 0;

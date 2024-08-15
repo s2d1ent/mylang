@@ -1,19 +1,10 @@
-#include "headers/common.h"
-
-long strlen(char *string){
-    long result = 0;
-    if(string == NULL){
-        return 0;
-    }
-    while(1){
-        if(string[result] == '\0'){
-            break;
-        }
-        ++result;
-    }
-
-    return result;
-}
+#ifndef LANG_COMMON_H
+#define LANG_COMMON_H 1
+#include <stdio.h>
+#include <stdlib.h>
+long strlen(char*);
+char* frword(FILE*);
+char* frstr(FILE*);
 
 char* frword(FILE *file){
     char *result;
@@ -58,3 +49,5 @@ char* frstr(FILE *file){
     getc(file);
     return result;
 }
+
+#endif

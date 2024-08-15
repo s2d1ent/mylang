@@ -1,53 +1,120 @@
-#include "headers/lang_words.h"
+#ifndef LANG_WORDS_C
+#define LANG_WORDS_C 1
+#define SENTENCE_STD {0, NULL}
+#define SENTENCE_WORD_STD {NULL, NULL}
+#include "headers/string_builder.h"
 
-// TODO
-t_lang_words *rwords(char *in_string){
-    t_lang_words *result = NULL;
-    if(in_string == NULL){
+typedef struct sentence_word_s {
+    string_builder *root;
+    struct sentence_word_s *next;
+} sentence_word;
+
+typedef struct sentence_s {
+    size_t size;
+    sentence_word *root;
+} sentence;
+
+sentence* init_sntnc();
+sentence_word* init_sntnc_word();
+void add_sntnc(sentence*,string_builder*);
+size_t size_sntnc(sentence*);
+void free_sntnc(sentence*);
+void clear_sntnc_words(sentence_word*);
+sentence* parse_strbld(string_builder*);
+sentence_word* last_sntnc(sentence*);
+int is_empty_sntnc(sentence*);
+
+sentence* init_sntnc(){
+    sentence* result = (sentence*)malloc(sizeof(sentence));
+    result->size = 0;
+    result->root = NULL;
+    return result;
+}
+
+sentence_word* init_sntnc_word(){
+    sentence_word* result = (sentence_word*)malloc(sizeof(sentence_word));
+    result->root = NULL;
+    result->next = NULL;
+    return result;
+}
+
+size_t size_sntnc(sentence* sentence){
+    return sentence->size;
+}
+
+int is_empty_sntnc(sentence *sentence){
+    return (size_sntnc(sentence) == 0 ? 1 : 0);
+}
+
+sentence_word* last_sntnc(sentence *sentence){
+    sentence_word *result = NULL;
+    if(sentence == NULL){
         return NULL;
     }
-    if(strlen(in_string) == 0){
+    if(sentence->size == 0){
         return NULL;
     }
-    
+    if(sentence->root == NULL){
+        return NULL;
+    }
+    result = sentence->root;
+    while(1){
+        if(result->next == NULL){
+            break;
+        }
+        result = result->next;
+    }
 
     return result;
 }
 
-t_lang_words* parse_str_lngwds(char*){
-    t_lang_words *result = (t_lang_words*)malloc(sizeof(t_lang_words));
-
-    
-
-    return result;
-}
-
-void free_words(t_lang_words *words){
-    if(words == NULL) {
+void add_sntnc(sentence* sentence, string_builder* string_builder){
+    sentence_word *tmp = NULL;
+    if(sentence == NULL){
         return;
     }
-    free_words(words->next);
-    if(words->count != 0){
-        for(int i = 0; i < words->count; ++i){
-            free(*(words->words+i));
-        }
-        free(words->words);
+    if(string_builder == NULL){
+        return;
     }
-    free(words);
+    if(is_empty_sntnc(sentence)){
+        tmp = (sentence_word*)malloc(sizeof(sentence_word));
+        tmp->root = string_builder;
+        sentence->root = tmp;
+        sentence->size++;
+        return;
+    }
+    tmp = last_sntnc(sentence);
+    tmp->next = (sentence_word*)malloc(sizeof(sentence_word));
+    tmp->next->root = string_builder;
+    sentence->size++;
 }
 
-int add_words(t_lang_words *root, t_lang_words *words){
-    if(root == words){
-        return 0;
-    }
-    if(root->next == NULL){
-        root->next = words;
-    } else {
-        t_lang_words *tmp = root;
-        while(tmp->next != NULL){
-            tmp = tmp->next;
-        }
-        tmp->next = words;
-    }
-    return 1;
+sentence* parse_strbld(string_builder* string_builder){
+
 }
+
+void free_sntnc(sentence* sentence){
+    if(sentence->size > 0){
+        clear_sntnc_words(sentence->root);
+        sentence->root = NULL;
+        sentence->size = 0;
+    }
+    free(sentence);
+}
+
+void clear_sntnc_words(sentence_word* sentence_word){
+    if(sentence_word == NULL){
+        return;
+    }
+    if(sentence_word->next != NULL){
+        clear_sntnc_words(sentence_word->next);
+        sentence_word->next = NULL;
+    }
+    if(sentence_word->root != NULL){
+        free_strbld(sentence_word->root);
+        sentence_word->root = NULL;
+    }
+    free(sentence_word);
+}
+
+#endif
