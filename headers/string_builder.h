@@ -17,17 +17,21 @@ typedef struct string_builder_s{
 } string_builder;
 
 string_builder *init_strbld();
+string_builder *slice_strbld(string_builder*, int, int);
+string_builder_symbol *last_strbld(string_builder*);
+string_builder_symbol *indexof_strbld(string_builder*, int);
 
 long size_strbld(string_builder*);
 long size_max_strbld();
 int is_empty_strbld(string_builder*);
 char* get_strbld(string_builder*);
-string_builder_symbol *get_last_strbld(string_builder*);
 
-int set_symbol(string_builder*,char);
+int append_strbld(string_builder*,char);
 int set_string(string_builder*,char*);
+void vkiller(string_builder*);
 
 void clear_strbld(string_builder*);
+int clear_smbl(string_builder*, string_builder_symbol*);
 void free_strbld(string_builder*);
 
 long strlen(char*);
@@ -49,6 +53,73 @@ long strlen(char *string){
 
 string_builder *init_strbld(){
     return ((string_builder*)malloc(sizeof(string_builder)));
+}
+
+string_builder *slice_strbld(string_builder *string_builder, int start_index, int count){
+    struct string_builder_s *result = NULL;
+    string_builder_symbol *tmp = NULL;
+    if(string_builder == NULL){
+        return NULL;
+    }
+    if(count == 0){
+        return NULL;
+    }
+    if(start_index > string_builder->size){
+        fprintf(stderr, "Override index");
+        return NULL;
+    }
+    result = (struct string_builder_s*)malloc(sizeof(struct string_builder_s));
+    tmp = indexof_strbld(string_builder, start_index);
+    for(int i = 0; i < count; ++i){
+        struct string_builder_symbol_s *buf = tmp;
+        append_strbld(result, tmp->value);
+        if(tmp->next == NULL){
+            break;
+        }
+        tmp = tmp->next;
+        clear_smbl(string_builder, buf);
+    }
+
+    return result;
+}
+
+string_builder_symbol *indexof_strbld(string_builder *string_builder, int index){
+    string_builder_symbol *result = NULL;
+    if(string_builder == NULL){
+        return NULL;
+    }
+    if(string_builder->size == 0 || string_builder->root == NULL){
+        return NULL;
+    }
+    if(index > (string_builder->size-1)){
+        return NULL;
+    }
+    if(index == (string_builder->size-1)){
+        return last_strbld(string_builder);
+    }
+    if(index == 0){
+        return string_builder->root;
+    }
+    result = string_builder->root;
+    for(int i = 0; i < index; ++i){
+        result = result->next;
+    }
+    return result;
+}
+
+void trim(string_builder *string_builder){
+    if(string_builder == NULL){
+        return;
+    }
+    if(string_builder->size == 0 || string_builder->root == NULL){
+        return;
+    }
+    while(string_builder->root->value <= (char)32){
+        clear_smbl(string_builder, string_builder->root);
+    }
+    while((last_strbld(string_builder))->value <= (char)32){
+        clear_smbl(string_builder, last_strbld(string_builder));
+    }
 }
 
 long size_strbld(string_builder *string_builder){
@@ -79,7 +150,7 @@ char* get_strbld(string_builder *string_builder){
     return result;
 }
 
-string_builder_symbol *get_last_strbld(string_builder *string_builder){
+string_builder_symbol *last_strbld(string_builder *string_builder){
     string_builder_symbol *result = NULL;
     if(string_builder == NULL){
         return NULL;
@@ -100,7 +171,7 @@ string_builder_symbol *get_last_strbld(string_builder *string_builder){
     return result;
 }
 
-int set_symbol(string_builder *string_builder,char in_symbol){
+int append_strbld(string_builder *string_builder,char in_symbol){
     string_builder_symbol *tmp_symbol = NULL;
     if(string_builder->size == MAX_LEN_STRBLD){
        return 0; 
@@ -114,7 +185,7 @@ int set_symbol(string_builder *string_builder,char in_symbol){
         string_builder->size++;
         return 1;
     }
-    tmp_symbol = get_last_strbld(string_builder);
+    tmp_symbol = last_strbld(string_builder);
     tmp_symbol->next = (string_builder_symbol*)malloc(sizeof(string_builder_symbol));
     tmp_symbol->next->value = in_symbol;
     string_builder->size++;
@@ -133,9 +204,44 @@ int set_string(string_builder *string_builder,char *in_string){
         clear_strbld(string_builder);
     }
     for(int i = 0 ; i < size && i <= MAX_LEN_STRBLD; ++i){
-        set_symbol(string_builder, in_string[i]);
+        append_strbld(string_builder, in_string[i]);
     }
     return 1;
+}
+
+int clear_smbl(string_builder *string_builder, 
+                string_builder_symbol *string_builder_symbol){
+    int result = 1;
+    struct string_builder_symbol_s *tmp = NULL;
+    struct string_builder_symbol_s *tmp2 = NULL;
+    if(string_builder == NULL || string_builder_symbol == NULL){
+        return 0;
+    }
+    if(string_builder->size == 0 || string_builder->root == NULL){
+        return 0;
+    }
+    if(string_builder_symbol == string_builder->root){
+        tmp2 = (string_builder_symbol->next == NULL ? 
+            NULL : string_builder_symbol->next);
+        string_builder->root = tmp2;
+    } else {
+        tmp = string_builder->root;
+        tmp2 = (string_builder_symbol->next == NULL ? 
+            NULL : string_builder_symbol->next);
+        while(tmp->next != string_builder_symbol){
+            if(tmp->next == NULL){
+                return 0;
+            }
+            tmp = tmp->next;
+        }
+        tmp->next = tmp2;
+    }
+
+    string_builder_symbol->value = 0;
+    string_builder_symbol->next  = NULL;
+    free(string_builder_symbol);
+    string_builder->size--;
+    return result;
 }
 
 void free_smbls(string_builder_symbol *string_builder_symbol){

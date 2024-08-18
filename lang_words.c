@@ -88,9 +88,21 @@ void add_sntnc(sentence* sentence, string_builder* string_builder){
     tmp->next->root = string_builder;
     sentence->size++;
 }
-
+// TODO
 sentence* parse_strbld(string_builder* string_builder){
+    sentence *result = NULL;
+    sentence_word *tmp = NULL;
+    if(string_builder == NULL){
+        return NULL;
+    }
+    if(string_builder->size == 0 || string_builder->root == NULL){
+        return NULL;
+    }
+    result = (sentence*)malloc(sizeof(sentence));
+    while(1){
 
+    }
+    return result;
 }
 
 void free_sntnc(sentence* sentence){

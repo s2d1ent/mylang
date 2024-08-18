@@ -3,10 +3,10 @@ This project about created translator for programming languages. Jest practice..
 
 I will use byte code in my project for simpled.
 
-| Modules        | Tested |
-| :---:          | :---:  |
-| byte_code      | -      |
-| common         | -      |
-| lang_words     | -      |
-| string_builder | +      |
-| preprocessor   | -      |
+| Modules        | Tested | Comment |
+| :---:          | :---:  | :--     |
+| byte_code      | -      |         |
+| common         | -      |         |
+| lang_words     | -      |Processs |
+| string_builder | +      |Finish   |
+| preprocessor   | -      |         |
