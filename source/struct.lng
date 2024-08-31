@@ -1,0 +1,9 @@
+# Структура, пользовательский тип данных.
+# По стандарту инициализация как 0 или null
+#
+#
+struct name_struct
+    byte a
+    short b
+    int c
+endstruct

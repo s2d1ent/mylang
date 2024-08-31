@@ -22,11 +22,11 @@ string_builder_symbol *last_strbld(string_builder*);
 string_builder_symbol *indexof_strbld(string_builder*, int);
 
 long size_strbld(string_builder*);
-long size_max_strbld();
 int is_empty_strbld(string_builder*);
 char* get_strbld(string_builder*);
 
 int append_strbld(string_builder*,char);
+int append_str_strbld(string_builder*,char*);
 int set_string(string_builder*,char*);
 void vkiller(string_builder*);
 
@@ -35,6 +35,7 @@ int clear_smbl(string_builder*, string_builder_symbol*);
 void free_strbld(string_builder*);
 
 long strlen(char*);
+int strcpy(char*, char*);
 
 long strlen(char *string){
     long result = 0;
@@ -49,6 +50,23 @@ long strlen(char *string){
     }
 
     return result;
+}
+
+int strcpy(char* copy_from, char* copy_to){
+    int length = 0;
+    if(copy_from == NULL){
+        return 0;
+    }
+    if(copy_to != NULL){
+        free(copy_to);
+    }
+    length = strlen(copy_from);
+    copy_to = (char*)malloc(length+1);
+    for(int i = 0; i < length; ++i){
+        copy_to[i] = copy_from[i];
+    }
+    copy_to[length] = '\0';
+    return 1;
 }
 
 string_builder *init_strbld(){
@@ -126,10 +144,6 @@ long size_strbld(string_builder *string_builder){
     return string_builder->size;
 }
 
-long size_max_strbld(){
-    return MAX_LEN_STRBLD;
-}
-
 int is_empty_strbld(string_builder *string_builder){
     return (string_builder->size == 0 ? 1 : 0);
 }
@@ -173,9 +187,11 @@ string_builder_symbol *last_strbld(string_builder *string_builder){
 
 int append_strbld(string_builder *string_builder,char in_symbol){
     string_builder_symbol *tmp_symbol = NULL;
+    /*
     if(string_builder->size == MAX_LEN_STRBLD){
        return 0; 
     }
+    */
     if(string_builder == NULL){
         return 0;
     }
@@ -206,6 +222,43 @@ int set_string(string_builder *string_builder,char *in_string){
     for(int i = 0 ; i < size && i <= MAX_LEN_STRBLD; ++i){
         append_strbld(string_builder, in_string[i]);
     }
+    return 1;
+}
+
+int append_str(string_builder* string_builder,char* append_string){
+    char* old_str = NULL;
+    char* new_str = NULL;
+    int new_str_length = 0;
+    if(string_builder->size > 0){
+        int i = 0;
+        int pos_old = 0;
+        int pos_add = 0;
+
+        int len_old = string_builder->size;
+        int len_add = strlen(append_string);
+        new_str_length = len_old + len_add;
+
+        old_str = get_strbld(string_builder);
+        new_str = (char*)malloc(new_str_length+1);
+        for(;i < new_str_length; ++i){
+            if(pos_old < len_old){
+                new_str[i] = old_str[pos_old];
+                ++pos_old;
+            }
+            else {
+                if(pos_add < len_add){
+                    new_str[i] = append_string[pos_add];
+                    ++pos_add;
+                }
+            }
+        }
+
+    } else {
+        new_str = append_string;
+    }
+    
+    set_string(string_builder, new_str);
+    free(new_str);
     return 1;
 }
 

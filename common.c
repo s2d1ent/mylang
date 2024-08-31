@@ -2,7 +2,6 @@
 #define LANG_COMMON_H 1
 #include <stdio.h>
 #include <stdlib.h>
-long strlen(char*);
 char* frword(FILE*);
 char* frstr(FILE*);
 
@@ -28,24 +27,72 @@ char* frword(FILE *file){
     return result;
 }
 
+char* read_fstr(FILE *file){
+    char* result = NULL;
+    char c = 0;
+    short length = 0;
+    if(feof(file) != 0){
+        return NULL;
+    }
+    while(1){
+        c = getc(file);
+        if(c == EOF){
+            break;
+        }        
+        if(c == '\n' || c == '\0'){
+            ++length;
+            break;
+        }
+        ++length;
+    }
+    if(c == EOF){
+        result = (char*)malloc(length+1);
+    } else {
+        result = (char*)malloc(length);
+    }
+    fseek(file, -(length), SEEK_CUR);
+
+    for(int i = 0; i < length; ++i){   
+        result[i] = getc(file);
+    }
+
+    if(c == EOF){
+        result[length] = '\0';
+        while(feof(file) == 0){
+            getc(file);
+        }
+    } else {
+        result[length-1] = '\0';
+    }
+    return result;
+}
+
 char* frstr(FILE *file){
     char *result;
     char c;
     short length = 0;
     while (1){
         c = getc(file);
-        if(c == EOF || c == '\n' || c == '\0'){
+        printf("%c\n", c);
+        if(c == EOF){
+            return NULL;
+        }
+        if(c == '\n' && length == 0){
+            continue;
+        }
+        if(c == '\n' || c == '\0'){
+            ++length;
             break;
         }
         ++length;
     }
     c = 0;
-    fseek(file, -(length+1), SEEK_CUR);
-    result = (char*)malloc(length+1);
-    result[length] = '\0';
+    fseek(file, -(length), SEEK_CUR);
+    result = (char*)malloc(length);
     for(int i = 0, c = getc(file); i < length ; c = getc(file), ++i){
         *(result+i)=c;
     }
+    result[length] = '\0';
     getc(file);
     return result;
 }
