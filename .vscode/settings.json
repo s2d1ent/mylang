@@ -6,6 +6,7 @@
         "string_builder.h": "c",
         "lang_types.h": "c",
         "stdio.h": "c",
-        "stdatomic.h": "c"
+        "stdatomic.h": "c",
+        "lang_define.h": "c"
     }
 }

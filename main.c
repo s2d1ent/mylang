@@ -11,7 +11,7 @@ int main(int argc, char **argv){
     FILE *input_file = fopen("./source/main.lng", "r");
     FILE *output_file = fopen("./source/a.out", "w");
 
-    lang_init(input_file, output_file);
+    init_lang(input_file, output_file);
 
     fclose(input_file);
     fclose(output_file);

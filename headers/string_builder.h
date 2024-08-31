@@ -35,7 +35,7 @@ int clear_smbl(string_builder*, string_builder_symbol*);
 void free_strbld(string_builder*);
 
 long strlen(char*);
-int strcpy(char*, char*);
+int str_cpy(char*, char*);
 
 long strlen(char *string){
     long result = 0;
@@ -52,7 +52,7 @@ long strlen(char *string){
     return result;
 }
 
-int strcpy(char* copy_from, char* copy_to){
+int str_cpy(char* copy_from, char* copy_to){
     int length = 0;
     if(copy_from == NULL){
         return 0;

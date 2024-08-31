@@ -27,7 +27,7 @@ char* frword(FILE *file){
     return result;
 }
 
-char* read_fstr(FILE *file){
+char* frstr(FILE *file){
     char* result = NULL;
     char c = 0;
     short length = 0;
@@ -64,36 +64,6 @@ char* read_fstr(FILE *file){
     } else {
         result[length-1] = '\0';
     }
-    return result;
-}
-
-char* frstr(FILE *file){
-    char *result;
-    char c;
-    short length = 0;
-    while (1){
-        c = getc(file);
-        printf("%c\n", c);
-        if(c == EOF){
-            return NULL;
-        }
-        if(c == '\n' && length == 0){
-            continue;
-        }
-        if(c == '\n' || c == '\0'){
-            ++length;
-            break;
-        }
-        ++length;
-    }
-    c = 0;
-    fseek(file, -(length), SEEK_CUR);
-    result = (char*)malloc(length);
-    for(int i = 0, c = getc(file); i < length ; c = getc(file), ++i){
-        *(result+i)=c;
-    }
-    result[length] = '\0';
-    getc(file);
     return result;
 }
 
